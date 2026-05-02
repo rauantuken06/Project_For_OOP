@@ -123,7 +123,7 @@ public class Student extends User implements Comparable<Student> {
 
     @Override
     public int compareTo(Student other) {
-        return Double.compare(other gpa, this.gpa);
+        return Double.compare(other.gpa, this.gpa);
     }
 
     public String getStudentId() {
