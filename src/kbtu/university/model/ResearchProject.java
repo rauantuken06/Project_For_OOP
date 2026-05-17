@@ -1,7 +1,10 @@
 package kbtu.university.model;
 
+import kbtu.university.exceptions.NonResearcherProjectJoinException;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,9 +18,11 @@ public class ResearchProject implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     private final Set<Researcher> participants;
+    private final Set<ResearchPaper> publishedPapers;
 
     public ResearchProject() {
         this.participants = new LinkedHashSet<>();
+        this.publishedPapers = new LinkedHashSet<>();
     }
 
     public ResearchProject(String title, String description, Researcher supervisor, LocalDate startDate, LocalDate endDate) {
@@ -85,18 +90,59 @@ public class ResearchProject implements Serializable {
     }
 
     public Set<Researcher> getParticipants() {
-        return participants;
+        return Collections.unmodifiableSet(participants);
     }
 
     public void addParticipant(Researcher participant) {
         if (participant == null) {
             throw new IllegalArgumentException("Participant cannot be null.");
         }
+
         participants.add(participant);
     }
 
+    public void addParticipant(Object participant) throws NonResearcherProjectJoinException {
+        if (!(participant instanceof Researcher researcher)) {
+            throw new NonResearcherProjectJoinException("Only researchers can join research project.");
+        }
+
+        addParticipant(researcher);
+    }
+
+    public void addParticipantWithCheck(Object participant) throws NonResearcherProjectJoinException {
+        if (!(participant instanceof Researcher researcher)) {
+            throw new NonResearcherProjectJoinException("Only researchers can join research project.");
+        }
+
+        addParticipant(researcher);
+    }
+
     public void removeParticipant(Researcher participant) {
+        if (participant == null) {
+            throw new IllegalArgumentException("Participant cannot be null.");
+        }
+
         participants.remove(participant);
+    }
+
+    public Set<ResearchPaper> getPublishedPapers() {
+        return Collections.unmodifiableSet(publishedPapers);
+    }
+
+    public void addPublishedPaper(ResearchPaper paper) {
+        if (paper == null) {
+            throw new IllegalArgumentException("Published paper cannot be null.");
+        }
+
+        publishedPapers.add(paper);
+    }
+
+    public void removePublishedPaper(ResearchPaper paper) {
+        if (paper == null) {
+            throw new IllegalArgumentException("Published paper cannot be null.");
+        }
+
+        publishedPapers.remove(paper);
     }
 
     @Override
@@ -107,6 +153,7 @@ public class ResearchProject implements Serializable {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", participants=" + participants.size() +
+                ", publishedPapers=" + publishedPapers.size() +
                 '}';
     }
 

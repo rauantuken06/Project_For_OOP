@@ -1,10 +1,11 @@
 package kbtu.university.patterns;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import kbtu.university.model.User;
 
-public class DataStore {
+public class DataStore implements Serializable {
 
     private static DataStore instance;
 

@@ -3,6 +3,8 @@ package kbtu.university.model;
 import kbtu.university.enums.DegreeLevel;
 import kbtu.university.enums.School;
 import kbtu.university.enums.UserRole;
+import kbtu.university.exceptions.CreditLimitException;
+import kbtu.university.exceptions.SupervisorHIndexException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +44,7 @@ public class Student extends User implements Comparable<Student> {
         this.courses = new ArrayList<>();
     }
 
-    public void registerCourse(Course course) {
+    public void registerCourse(Course course) throws CreditLimitException {
         if (course == null) {
             throw new IllegalArgumentException("Course cannot be null.");
         }
@@ -52,7 +54,7 @@ public class Student extends User implements Comparable<Student> {
         }
 
         if (this.totalCredits + course.getCredits() > 21) {
-            throw new IllegalArgumentException("Student cannot register for more than 21 credits.");
+            throw new CreditLimitException("Student cannot register for more than 21 credits.");
         }
 
         courses.add(course);
@@ -204,7 +206,7 @@ public class Student extends User implements Comparable<Student> {
         return researchSupervisor;
     }
 
-    public void setResearchSupervisor(Researcher researchSupervisor) {
+    public void setResearchSupervisor(Researcher researchSupervisor) throws SupervisorHIndexException {
         if (yearOfStudy != 4) {
             throw new IllegalArgumentException("Only 4th year students can have a research supervisor.");
         }
@@ -214,7 +216,7 @@ public class Student extends User implements Comparable<Student> {
         }
 
         if (researchSupervisor.getHIndex() < 3) {
-            throw new IllegalArgumentException("Research supervisor must have h-index at least 3.");
+            throw new SupervisorHIndexException("Research supervisor must have h-index at least 3.");
         }
 
         this.researchSupervisor = researchSupervisor;
