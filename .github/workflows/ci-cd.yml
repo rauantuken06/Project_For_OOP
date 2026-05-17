@@ -3,8 +3,10 @@ name: Project CI/CD
 on:
   push:
     branches:
-      - aslan
+      - master
   pull_request: 
+    branches: 
+      - master
   workflow_dispatch: 
 
 permissions: 
