@@ -454,6 +454,44 @@ public class UniversitySystemDemo {
 
         System.out.println();
 
+        System.out.println("BONUS 1) Attendance demo...");
+
+        AttendanceService attendanceService = new AttendanceService();
+
+        attendanceService.markAttendance(
+                student1,
+                oop,
+                oopLecture,
+                LocalDate.now(),
+                AttendanceStatus.PRESENT
+        );
+
+        attendanceService.markAttendance(
+                student1,
+                oop,
+                oopPractice,
+                LocalDate.now(),
+                AttendanceStatus.LATE
+        );
+
+        attendanceService.printStudentAttendance(student1);
+
+        System.out.println();
+
+        System.out.println("BONUS 2) Recommendation letter demo...");
+
+        RecommendationService recommendationService = new RecommendationService();
+
+        RecommendationLetter letter = recommendationService.createLetter(
+                student1,
+                professor,
+                "I recommend this student for research internship because of strong academic performance and active participation in university research projects."
+        );
+
+        letter.printLetter();
+
+        System.out.println();
+
         System.out.println("===== Demo finished =====");
     }
 }
