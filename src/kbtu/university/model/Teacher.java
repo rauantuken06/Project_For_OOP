@@ -6,9 +6,10 @@ import kbtu.university.enums.UserRole;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class Teacher extends Employee {
+public class Teacher extends Employee implements Researcher {
     private static final long serialVersionUID = 1L;
 
     private TeacherTitle title;
@@ -153,5 +154,29 @@ public class Teacher extends Employee {
                 ", averageRating=" + getAverageRating() +
                 ", researcher=" + isResearcher() +
                 '}';
+    }
+
+    @Override
+    public int getHIndex() {
+        if (researchProfile == null) {
+            return 0;
+        }
+        return researchProfile.getHIndex();
+    }
+
+    @Override
+    public List<ResearchPaper> getResearchPapers() {
+        if (researchProfile == null) {
+            throw new IllegalArgumentException("This teacher is not researcher.");
+        }
+        return researchProfile.getResearchPapers();
+    }
+
+    @Override
+    public void printPapers(Comparator<ResearchPaper> comparator) {
+        if (researchProfile == null) {
+            throw new IllegalArgumentException("This teacher is not researcher.");
+        }
+        researchProfile.printPapers(comparator);
     }
 }
