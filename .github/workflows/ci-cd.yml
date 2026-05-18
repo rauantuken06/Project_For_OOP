@@ -80,7 +80,12 @@ jobs:
           distribution: temurin
           java-version: "21"
     
-          
+      - name: Generate Javadoc documentation
+        run: |
+          mkdir -p documentation
+          find src -name "*.java" > sources.txt
+          javadoc -encoding UTF-8 -d documentation @sources.txt
+
       - name: Download runnable JAR artifact
         uses: actions/download-artifact@v4
         with:
@@ -90,8 +95,15 @@ jobs:
       - name: Create delivery zip
         run: |
           mkdir -p delivery
-          zip -r delivery/oop-project-delivery.zip src Project.iml delivery/university-system.jar
+          zip -r delivery/oop-project-delivery.zip src documentation Project.iml delivery/university-system.jar
 
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-documentation
+          path: documentation
+              
       - name: Upload project zip artifact
         uses: actions/upload-artifact@v4
         with:
