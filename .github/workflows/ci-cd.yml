@@ -36,14 +36,31 @@ jobs:
           find src -name "*.java" > sources.txt
           javac -encoding UTF-8 -d out @sources.txt
 
+      - name: Create runnable JAR
+        run: |
+          mkdir -p delivery
+          jar cfe delivery/university-system.jar kbtu.university.UniversitySystemDemo -C out .
+
       - name: Run simple check
         run: java -cp out kbtu.university.MainPartBCheck
+
+      - name: Run full project demo
+        run: java -cp out kbtu.university.UniversitySystemDemo
+
+      - name: Run runnable JAR
+        run: java -jar delivery/university-system.jar
 
       - name: Upload compiled classes artifact
         uses: actions/upload-artifact@v4
         with:
             name: compiled-classes
             path: out
+
+      - name: Upload runnable JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: university-system-jar
+          path: delivery/university-system.jar
   delivery:
     name: Prepare delivery package
     runs-on: ubuntu-latest
@@ -59,22 +76,10 @@ jobs:
           distribution: temurin
           java-version: "21"
     
-      - name: Generate Javadoc documentation
-        run: |
-          mkdir -p documentation
-          find src -name "*.java" > sources.txt
-          javadoc -encoding UTF-8 -d documentation @sources.txt || true
-
       - name: Create delivery zip
         run: |
           mkdir -p delivery
-          zip -r delivery/oop-project-delivery.zip src documentation README.md Project.iml
-
-      - name: Upload documentation artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-documentation
-          path: documentation
+          zip -r delivery/oop-project-delivery.zip src Project.iml delivery/university-system.jar
 
       - name: Upload project zip artifact
         uses: actions/upload-artifact@v4
